@@ -1,13 +1,16 @@
-import React from 'react'
-// import {auth} from 'firebase/app'
+import React from "react";
+import { styled, Container, Box, Typography } from "@mui/material";
+import Navbar from "../components/Navbar";
+import Register from "../components/Register";
 
 const Homepage = () => {
-    
-    return (
-        <div>
-            <h1>Homepage</h1>
-        </div>
-    )
-}
+//   console.log(styled);
+  return (
+    <Box>
+      <Navbar />
+      <Register/>
+    </Box>
+  );
+};
 
-export default Homepage
+export default Homepage;
