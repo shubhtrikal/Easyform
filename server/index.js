@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const app = express()
 const dotenv = require('dotenv')
 const cors = require('cors')
+const authRoute = require('./Route/authRoute')
 dotenv.config()
 
 app.use(cors())
@@ -25,6 +26,8 @@ mongoose.connect(MONGO_URL, {
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
+
+app.use('/' ,authRoute);
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}!`)
