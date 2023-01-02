@@ -63,7 +63,7 @@ const Register = () => {
         password: '',
     }
 
-    console.log(token)
+    // console.log(token)
 
     return (
         <>

@@ -4,6 +4,7 @@ const app = express()
 const dotenv = require('dotenv')
 const cors = require('cors')
 const authRoute = require('./Route/authRoute')
+const formRoute = require('./Route/formRoute')
 dotenv.config()
 
 app.use(cors())
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/' ,authRoute);
+app.use('/', formRoute);
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}!`)

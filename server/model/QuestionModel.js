@@ -23,7 +23,7 @@ const questionSchema = new Schema({
         required: true,
     },
     answer : [{
-        type: Integer,
+        type: Number,
         required: true,
     }],
 })
