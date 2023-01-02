@@ -12,26 +12,52 @@ import FormGroup from '@mui/material/FormGroup';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
+import { useState } from 'react';
+import {useNavigate} from 'react-router-dom';
 
-export default function Navbar() {
-  const [auth, setAuth] = React.useState(true);
+const Navbar = (props) => {
+  const navigate = useNavigate();
+
+  const [token, setTokem] = useState(() => {
+    const saved = localStorage.getItem("token");
+    const initialValue = JSON.parse(saved);
+    return initialValue || "";
+  });
+  const [auth, setAuth] = React.useState(token === ""? false : true);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
+  // const handleChange = (event) => {
+  //   setAuth(event.target.checked);
+  // };
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  // const handleMenu = (event) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
+
+  const handleClick1 = () => {
+    props.setValue(2)
+  }
+
+  const handleClick2 = () => {
+    props.setValue(1)
+  }
+
+  const handleLogout = () => {
+    setAuth(false);
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    // props.setValue(1)
+    navigate('/')
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <FormGroup>
+      {/* <FormGroup>
         <FormControlLabel
           control={
             <Switch
@@ -42,7 +68,7 @@ export default function Navbar() {
           }
           label={auth ? 'Logout' : 'Login'}
         />
-      </FormGroup>
+      </FormGroup> */}
       <AppBar position="static">
         <Toolbar>
           {/* <IconButton
@@ -59,7 +85,7 @@ export default function Navbar() {
           </Typography>
           {auth ? (
             <div>
-              <IconButton
+              {/* <IconButton
                 size="large"
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
@@ -86,12 +112,13 @@ export default function Navbar() {
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu>
+              </Menu> */}
+              <Button color="inherit" onClick={handleLogout} > Logout </Button>
             </div>
           ) : (
             <Box>
-                <Button color="inherit">Login</Button>
-                <Button color="inherit">Register</Button>
+                <Button color="inherit" onClick = {handleClick1} >Login</Button>
+                <Button color="inherit" onClick = {handleClick2}>Register</Button>
             </Box>
           )}
         </Toolbar>
@@ -99,3 +126,5 @@ export default function Navbar() {
     </Box>
   );
 }
+
+export default Navbar;

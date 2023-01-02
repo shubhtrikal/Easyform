@@ -3,14 +3,33 @@ import { styled, Container, Box, Typography } from "@mui/material";
 import Navbar from "../components/Navbar";
 import Register from "../components/Register";
 import Login from "../components/Login";
+import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 const Homepage = () => {
-//   console.log(styled);
+  const navigate = useNavigate();
+  const [value , setValue] = useState(1)
+
+  // const [token, setToken] = useState(() => {
+  //   const saved = localStorage.getItem("token");
+  //   const initialValue = JSON.parse(saved);
+  //   return initialValue || "";
+  // });
+  // useEffect(() => {
+  // if(token)
+  //   navigate('/dashboard');
+  // }, [])
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem('token'));
+    if (token) {
+      navigate('/dashboard');
+    }
+  }, []);
   return (
     <Box>
-      <Navbar />
-      <Register/>
-      <Login/>
+      <Navbar setValue={setValue} />
+      {value === 1 ? <Register/> : <Login/>}
     </Box>
   );
 };

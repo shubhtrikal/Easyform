@@ -4,20 +4,41 @@ import { Formik, Field, Form } from 'formik';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import {auth } from '../firebase/app';
 import {useState} from 'react'
-
-
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
+    const navigate = useNavigate()
     const [errorMessage, setErrorMessage] = useState('')
+    const [token, setToken] = useState(null)
+    const [user, setUser] = useState(null)
+
+    const SubmitMongo = async(values) => {
+        try {
+            console.log("shubh");
+            const res = await axios.post('http://localhost:8000/login', {
+                email: values.email,
+            })
+            
+            localStorage.setItem('user', JSON.stringify(res.data));
+            setUser(res.data);
+            navigate('/dashboard')
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const onSubmit = async(values) => {
         await signInWithEmailAndPassword(auth, values.email, values.password)
         .then((userCredential) => {
             // Signed in 
-            const user = userCredential.user;
-            console.log(user);
+            // const user = userCredential.user;
+            // console.log(user);
+            setToken(userCredential.user.accessToken)
             setErrorMessage('User signed successfully')
+            localStorage.setItem('token', JSON.stringify(userCredential.user.accessToken));
+            SubmitMongo(values)
             // ...
         })
         .catch((error) => {
@@ -27,6 +48,7 @@ const Login = () => {
             console.log(error)
             // ..
         });
+        
     }
 
     const initialValues = {
