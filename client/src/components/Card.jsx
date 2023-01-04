@@ -5,9 +5,30 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
 
 
 const BasicCard = (props) => {
+
+    const navigate = useNavigate()
+    const createForm = () => {
+        navigate('/createform');
+  }
+
+    const redirectForm = () => {
+        navigate({
+            pathname: "/form",
+            search: `?id=${props.id}`, 
+        });
+  }
+    // console.log(props.description)
+    const handleClcik = () => {
+        if(props.id === '0')
+            createForm()
+        else
+            redirectForm()
+    }
+
     return (
         <Card sx={{ minWidth: 275 }}>
             <CardContent>
@@ -25,7 +46,7 @@ const BasicCard = (props) => {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button size="small" > {props.btn} </Button>
+                <Button size="small" onClick = {handleClcik}> {props.btn}  </Button>
             </CardActions>
         </Card>
     );
