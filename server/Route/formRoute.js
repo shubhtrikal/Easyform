@@ -42,19 +42,60 @@ router.get('/getAllForm/:id', async (req, res) => {
     }
 })
 
-router.get('/getForm/:id', async (req, res) => {
-    const formID = req.params.id
+router.post('/getForm', async (req, res) => {
+    const {formID, userID} = req.body 
     const form = await Form.findById(formID)
+    let response = {
+        que : [],
+        admin : false,
+    }
     let questions = []
     if(!form) {
-        res.status(400).json({message: 'Form not found'})
+        res.status(400).json({message: 'Form or User not found'})
     }
     else {
+        if(form.admin == userID) {
+            response.admin = true
+        }
         for(let i = 0; i < form.questions.length; i++) {
             let question = await Question.findById(form.questions[i])
             questions.push(question)
         }
-        res.status(200).json(questions)
+        response.que = questions
+        res.status(200).json(response)
+    }
+})
+
+router.post('/addQuestion', async (req, res) => {
+    const {userID , formID, question, optionA, optionB, optionC, optionD} = req.body
+    let form = await Form.findById(formID)
+    if(!form) {
+        res.status(400).json({message: 'Form or User not found'})
+    }
+    else {
+        if(form.admin == userID) {
+            const que = new Question({
+                question: question,
+                optionA: optionA,
+                optionB: optionB,
+                optionC: optionC,
+                optionD: optionD,
+                answer: [],
+            })
+            await que.save()
+            form.questions.push(que._id)
+            form = await Form.findByIdAndUpdate(formID, form, {new : true})
+            let questions = []
+            for(let i = 0; i < form.questions.length; i++) {
+                let que = await Question
+                .findById(form.questions[i])
+                questions.push(que)
+            }
+            res.status(200).json(questions)
+        }
+        else {
+            res.status(400).json({message: 'You are not admin'})
+        }
     }
 })
 
